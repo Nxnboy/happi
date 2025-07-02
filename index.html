@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>สร้างข้อสอบด้วย AI </title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Sarabun:400,700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+            background: #f8fafc;
+            color: #222;
+        }
+        body {
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            min-height: 100vh;
+            width: 100vw;
+            max-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0;
+            background: #f8fafc;
+        }
+        .header-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 32px 0 32px;
+            box-sizing: border-box;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo img {
+            width: 48px;
+            height: 48px;
+        }
+        .profile-link {
+            color: #222;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 8px 20px;
+            font-size: 1em;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 2px 8px #0001;
+            transition: background 0.2s, border 0.2s;
+        }
+        .profile-link:hover {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+        }
+        h1 {
+            font-size: 2.1em;
+            font-weight: 700;
+            margin: 32px 0 18px 0;
+            color: #222;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        .modern-form {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px #0001;
+            padding: 32px 28px;
+            margin-bottom: 24px;
+        }
+        .modern-form label {
+            color: #222;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+            font-size: 1em;
+        }
+        .modern-form select,
+        .modern-form input[type="number"] {
+            color: #222;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #f1f5f9;
+            margin-bottom: 18px;
+            font-size: 1em;
+            font-family: inherit;
+            box-shadow: none;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .modern-form select:focus,
+        .modern-form input[type="number"]:focus {
+            border: 1.5px solid #3b82f6;
+            background: #fff;
+        }
+        .modern-btn {
+            color: #fff;
+            width: 100%;
+            padding: 12px 0;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px #3b82f633;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .modern-btn:hover {
+            background: #2563eb;
+        }
+        .modern-result {
+            overflow-x: auto;
+            word-break: break-word;
+            white-space: pre-wrap;
+            width: 100%;
+            max-width: 700px;
+            min-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #fff;
+            border-radius: 12px;
+            color: #222;
+            margin-top: 18px;
+            box-shadow: 0 2px 16px #0001;
+            padding: 22px 18px;
+            font-family: inherit;
+        }
+        @media (max-width: 700px) {
+            .header-bar {
+                flex-direction: column;
+                gap: 12px;
+                padding: 18px 8px 0 8px;
+            }
+            .modern-form {
+                padding: 18px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo">
+                <img src="https://atts.rtaf.mi.th/images/image/main-site/atts_logo_resize.png" alt="logo">
+                <span style="font-size:1.2em;font-weight:700;color:#222;">AI Gemini</span>
+            </div>
+            <a href="profile.html" class="profile-link">โปรไฟล์ของฉัน</a>
+        </div>
+        <h1>สร้างข้อสอบด้วย AI </h1>
+        <form id="examForm" class="modern-form">
+            <div class="form-group">
+                <label for="subject">เลือกวิชา</label>
+                <select id="subject" required>
+                    <option value="">--เลือกวิชา--</option>
+                    <option value="คณิตศาสตร์">คณิตศาสตร์</option>
+                    <option value="วิทยาศาสตร์">วิทยาศาสตร์</option>
+                    <option value="ภาษาไทย">ภาษาไทย</option>
+                    <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
+                    <option value="สังคมศึกษา">สังคมศึกษา</option>
+                    <option value="ฟิสิกส์">ฟิสิกส์</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="level">เลือกระดับการศึกษา</label>
+                <select id="level" required>
+                    <option value="">--เลือกระดับ--</option>
+                    <option value="ประถมศึกษา">ประถมศึกษา</option>
+                    <option value="มัธยมต้น">มัธยมต้น</option>
+                    <option value="มัธยมปลาย">มัธยมปลาย</option>
+                    <option value="อุดมศึกษา">อุดมศึกษา</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="amount">จำนวนข้อสอบ</label>
+                <input type="number" id="amount" min="1" max="50" value="5" required>
+            </div>
+            <button type="submit" class="modern-btn">สร้างข้อสอบ</button>
+        </form>
+        <div id="result" class="modern-result"></div>
+    </div>
+    <script>
+        // redirect ถ้ายังไม่ได้เข้าสู่ระบบ
+        if (!localStorage.getItem('currentUser')) {
+            window.location.href = "login.html";
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
+                    <option value="ภาษาไทย">ภาษาไทย</option>
+                    <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
+                    <option value="สังคมศึกษา">สังคมศึกษา</option>
+                    <option value="ฟิสิกส์">ฟิสิกส์</option>
+                    <!-- เพิ่มวิชาอื่นๆ ได้ -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="level">เลือกระดับการศึกษา</label>
+                <select id="level" required>
+                    <option value="">--เลือกระดับ--</option>
+                    <option value="ประถมศึกษา">ประถมศึกษา</option>
+                    <option value="มัธยมต้น">มัธยมต้น</option>
+                    <option value="มัธยมปลาย">มัธยมปลาย</option>
+                    <option value="อุดมศึกษา">อุดมศึกษา</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="amount">จำนวนข้อสอบ</label>
+                <input type="number" id="amount" min="1" max="50" value="5" required>
+            </div>
+            <button type="submit" class="modern-btn">สร้างข้อสอบ</button>
+        </form>
+        <div id="result" class="modern-result"></div>
+    </div>
+    <script>
+        // redirect ถ้ายังไม่ได้เข้าสู่ระบบ
+        if (!localStorage.getItem('currentUser')) {
+            window.location.href = "login.html";
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

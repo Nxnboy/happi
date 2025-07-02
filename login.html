@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>เข้าสู่ระบบ | สร้างข้อสอบด้วย AI Gemini</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background: #f8fafc;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #0001;
+            padding: 32px 24px;
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid #e5e7eb;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #222;
+            font-size: 1.5em;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #222;
+            font-weight: 600;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1em;
+            background: #f1f5f9;
+            color: #222;
+            margin-bottom: 6px;
+            outline: none;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px 0;
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .toggle-link {
+            color: #3b82f6;
+            text-align: center;
+            display: block;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .toggle-link:hover {
+            color: #222;
+        }
+        .error {
+            color: #e53e3e;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2 id="formTitle">เข้าสู่ระบบ</h2>
+        <div id="error" class="error"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">ชื่อผู้ใช้</label>
+                <input type="text" id="username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">รหัสผ่าน</label>
+                <input type="password" id="password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn" id="loginBtn">เข้าสู่ระบบ</button>
+        </form>
+        <form id="registerForm" style="display:none;">
+            <div class="form-group">
+                <label for="reg_username">ชื่อผู้ใช้</label>
+                <input type="text" id="reg_username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="reg_password">รหัสผ่าน</label>
+                <input type="password" id="reg_password" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn" id="registerBtn">ลงทะเบียน</button>
+        </form>
+        <span class="toggle-link" id="toggleRegister">ยังไม่มีบัญชี? ลงทะเบียน</span>
+        <span class="toggle-link" id="toggleLogin" style="display:none;">มีบัญชีแล้ว? เข้าสู่ระบบ</span>
+    </div>
+    <script>
+        // Toggle form
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const toggleRegister = document.getElementById('toggleRegister');
+        const toggleLogin = document.getElementById('toggleLogin');
+        const formTitle = document.getElementById('formTitle');
+        const errorDiv = document.getElementById('error');
+
+        toggleRegister.onclick = () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = '';
+            toggleRegister.style.display = 'none';
+            toggleLogin.style.display = '';
+            formTitle.textContent = 'ลงทะเบียน';
+            errorDiv.textContent = '';
+        };
+        toggleLogin.onclick = () => {
+            loginForm.style.display = '';
+            registerForm.style.display = 'none';
+            toggleRegister.style.display = '';
+            toggleLogin.style.display = 'none';
+            formTitle.textContent = 'เข้าสู่ระบบ';
+            errorDiv.textContent = '';
+        };
+
+        // Register
+        registerForm.onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('reg_username').value.trim();
+            const password = document.getElementById('reg_password').value;
+            if (!username || !password) {
+                errorDiv.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[username]) {
+                errorDiv.textContent = 'ชื่อผู้ใช้นี้ถูกใช้แล้ว';
+                return;
+            }
+            users[username] = password;
+            localStorage.setItem('users', JSON.stringify(users));
+            errorDiv.textContent = 'ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ';
+            setTimeout(() => {
+                toggleLogin.onclick();
+            }, 1000);
+        };
+
+        // Login
+        loginForm.onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[username] && users[username] === password) {
+                localStorage.setItem('currentUser', username);
+                window.location.href = "index.html";
+            } else {
+                errorDiv.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+            }
+        };
+    </script>
+</body>
+</html>

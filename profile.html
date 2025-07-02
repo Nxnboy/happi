@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>โปรไฟล์ของฉัน | สร้างข้อสอบด้วย AI Gemini</title>
+    <link href="https://fonts.googleapis.com/css?family=Sarabun:400,700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+            background: #f8fafc;
+            color: #222;
+        }
+        body {
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .profile-container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px #0001;
+            padding: 36px 28px;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+        }
+        .back-btn {
+            position: absolute;
+            left: 18px;
+            top: 18px;
+            background: #f1f5f9;
+            color: #222;
+            border: 1px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 6px 18px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 8px #0001;
+            font-family: inherit;
+            transition: background 0.2s, border 0.2s;
+        }
+        .back-btn:hover {
+            background: #e0e7ef;
+            border: 1px solid #cbd5e1;
+        }
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+            display: block;
+            margin: 0 auto 18px auto;
+            background: #f1f5f9;
+        }
+        .profile-info {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+        .profile-info input[type="text"] {
+            font-size: 1.1em;
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 10px;
+            width: 80%;
+            background: #f8fafc;
+            color: #222;
+            font-family: inherit;
+            box-shadow: none;
+        }
+        .btn {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 22px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 6px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px #3b82f633;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .logout-btn {
+            background: #e53e3e;
+            color: #fff;
+            margin-top: 18px;
+            box-shadow: 0 2px 8px #e53e3e33;
+        }
+        .logout-btn:hover {
+            background: #fff;
+            color: #e53e3e;
+            border: 1px solid #e53e3e;
+        }
+        .history-section {
+            margin-top: 36px;
+        }
+        .history-section h3 {
+            margin-bottom: 12px;
+            color: #3b82f6;
+            font-family: inherit;
+        }
+        .exam-history {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 1em;
+            word-break: break-word;
+            color: #222;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 2px 8px #0001;
+            font-family: inherit;
+        }
+        .no-history {
+            color: #888;
+            text-align: center;
+            font-family: inherit;
+        }
+        details summary {
+            cursor: pointer;
+            color: #3b82f6;
+            font-family: inherit;
+        }
+        details[open] summary {
+            color: #222;
+        }
+        .change-password-section {
+            margin-top: 30px;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 18px 10px;
+            box-shadow: 0 2px 8px #0001;
+        }
+        .change-password-section label {
+            color: #3b82f6;
+            font-family: inherit;
+            font-size: 0.98em;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .change-password-section input[type="password"] {
+            width: 90%;
+            padding: 7px 10px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #222;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .change-password-section .btn {
+            margin: 0;
+            margin-top: 8px;
+            width: 100%;
+        }
+        .change-password-section .msg {
+            color: #3b82f6;
+            font-size: 0.98em;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .change-password-section .msg.error {
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <button class="back-btn" onclick="window.location.href='index.html'">&larr; ย้อนกลับ</button>
+        <div class="profile-info">
+            <img id="profilePic" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff" alt="Profile Picture">
+            <input type="file" id="picInput" accept="image/*" style="display:none;">
+            <br>
+            <input type="text" id="displayName" value="" readonly>
+            <br>
+            <button class="btn" id="editBtn">แก้ไขชื่อ</button>
+            <button class="btn" id="saveBtn" style="display:none;">บันทึก</button>
+            <button class="btn" id="changePicBtn">เปลี่ยนรูปโปรไฟล์</button>
+            <button class="btn logout-btn" id="logoutBtn">ออกจากระบบ</button>
+        </div>
+        <div class="change-password-section">
+            <form id="changePasswordForm" autocomplete="off">
+                <label for="oldPassword">รหัสผ่านเดิม</label>
+                <input type="password" id="oldPassword" required>
+                <label for="newPassword">รหัสผ่านใหม่</label>
+                <input type="password" id="newPassword" required>
+                <button type="submit" class="btn">เปลี่ยนรหัสผ่าน</button>
+                <div class="msg" id="changePassMsg"></div>
+            </form>
+        </div>
+        <div class="history-section">
+            <h3>ประวัติการสร้างข้อสอบ</h3>
+            <div id="examHistory"></div>
+        </div>
+    </div>
+    <script>
+        // ตรวจสอบการเข้าสู่ระบบ
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = "login.html";
+        }
+
+        // โหลดข้อมูลโปรไฟล์
+        let profiles = JSON.parse(localStorage.getItem('profiles') || '{}');
+        let userProfile = profiles[currentUser] || { name: currentUser, pic: "" };
+
+        // แสดงชื่อและรูป
+        const displayName = document.getElementById('displayName');
+        const profilePic = document.getElementById('profilePic');
+        displayName.value = userProfile.name || currentUser;
+        if (userProfile.pic) {
+            profilePic.src = userProfile.pic;
+        } else {
+            profilePic.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile.name || currentUser)}&background=00fff7&color=181f2a`;
+        }
+
+        // แก้ไขชื่อ
+        const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        editBtn.onclick = () => {
+            displayName.readOnly = false;
+            displayName.focus();
+            editBtn.style.display = 'none';
+            saveBtn.style.display = '';
+        };
+        saveBtn.onclick = () => {
+            displayName.readOnly = true;
+            userProfile.name = displayName.value.trim() || currentUser;
+            profiles[currentUser] = userProfile;
+            localStorage.setItem('profiles', JSON.stringify(profiles));
+            editBtn.style.display = '';
+            saveBtn.style.display = 'none';
+            if (!userProfile.pic) {
+                profilePic.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile.name)}&background=00fff7&color=181f2a`;
+            }
+        };
+
+        // เปลี่ยนรูปโปรไฟล์
+        const changePicBtn = document.getElementById('changePicBtn');
+        const picInput = document.getElementById('picInput');
+        changePicBtn.onclick = () => picInput.click();
+        picInput.onchange = function() {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profilePic.src = e.target.result;
+                userProfile.pic = e.target.result;
+                profiles[currentUser] = userProfile;
+                localStorage.setItem('profiles', JSON.stringify(profiles));
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // ออกจากระบบ
+        document.getElementById('logoutBtn').onclick = function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = "login.html";
+        };
+
+        // เปลี่ยนรหัสผ่าน
+        document.getElementById('changePasswordForm').onsubmit = function(e) {
+            e.preventDefault();
+            const oldPass = document.getElementById('oldPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const msg = document.getElementById('changePassMsg');
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (!users[currentUser] || users[currentUser] !== oldPass) {
+                msg.textContent = "รหัสผ่านเดิมไม่ถูกต้อง";
+                msg.className = "msg error";
+                return;
+            }
+            if (!newPass || newPass.length < 4) {
+                msg.textContent = "รหัสผ่านใหม่ควรมีอย่างน้อย 4 ตัวอักษร";
+                msg.className = "msg error";
+                return;
+            }
+            users[currentUser] = newPass;
+            localStorage.setItem('users', JSON.stringify(users));
+            msg.textContent = "เปลี่ยนรหัสผ่านสำเร็จ!";
+            msg.className = "msg";
+            document.getElementById('changePasswordForm').reset();
+            setTimeout(() => { msg.textContent = ""; }, 2000);
+        };
+
+        // แสดงประวัติการสร้างข้อสอบ
+        function renderHistory() {
+            const examHistoryDiv = document.getElementById('examHistory');
+            const allHistory = JSON.parse(localStorage.getItem('examHistory') || '[]');
+            const userHistory = allHistory.filter(h => h.username === currentUser);
+            if (userHistory.length === 0) {
+                examHistoryDiv.innerHTML = '<div class="no-history">ยังไม่มีประวัติการสร้างข้อสอบ</div>';
+                return;
+            }
+            examHistoryDiv.innerHTML = userHistory.reverse().map(h => `
+                <div class="exam-history">
+                    <b>วิชา:</b> ${h.subject} <b>ระดับ:</b> ${h.level} <b>จำนวน:</b> ${h.amount}<br>
+                    <b>วันที่:</b> ${new Date(h.createdAt).toLocaleString()}<br>
+                    <details>
+                        <summary>ดูข้อสอบ</summary>
+                        <pre>${h.exam}</pre>
+                    </details>
+                </div>
+            `).join('');
+        }
+        renderHistory();
+    </script>
+</body>
+</html>
+    <script>
+        renderHistory();
+    </script>
+</body>
+</html>
