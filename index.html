@@ -176,7 +176,19 @@
                     <option value="ภาษาไทย">ภาษาไทย</option>
                     <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
                     <option value="สังคมศึกษา">สังคมศึกษา</option>
+                    <option value="สุขศึกษาและพลศึกษา">สุขศึกษาและพลศึกษา</option>
+                    <option value="ศิลปะ">ศิลปะ</option>
+                    <option value="การงานอาชีพ">การงานอาชีพ</option>
                     <option value="ฟิสิกส์">ฟิสิกส์</option>
+                    <option value="เคมี">เคมี</option>
+                    <option value="ชีววิทยา">ชีววิทยา</option>
+                    <option value="แคลคูลัส">แคลคูลัส</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="chapter">เลือกบท</label>
+                <select id="chapter" required>
+                    <option value="">--เลือกบท--</option>
                 </select>
             </div>
             <div class="form-group">
@@ -202,41 +214,64 @@
         if (!localStorage.getItem('currentUser')) {
             window.location.href = "login.html";
         }
+
+        // เพิ่ม script สำหรับเลือกบทตามวิชา
+        const subjectToChapters = {
+            "คณิตศาสตร์": [
+                "จำนวนเต็ม", "เศษส่วน", "สมการ", "เรขาคณิต", "สถิติ"
+            ],
+            "วิทยาศาสตร์": [
+                "สิ่งมีชีวิต", "พลังงาน", "แรงและการเคลื่อนที่", "สารและสมบัติของสาร", "โลกและอวกาศ"
+            ],
+            "ภาษาไทย": [
+                "การอ่านจับใจความ", "หลักภาษา", "วรรณคดี", "การเขียน", "คำศัพท์"
+            ],
+            "ภาษาอังกฤษ": [
+                "Vocabulary", "Grammar", "Reading", "Writing", "Speaking"
+            ],
+            "สังคมศึกษา": [
+                "ประวัติศาสตร์", "ภูมิศาสตร์", "หน้าที่พลเมือง", "เศรษฐศาสตร์", "ศาสนา"
+            ],
+            "ฟิสิกส์": [
+                "กลศาสตร์", "ไฟฟ้า", "คลื่น", "แสง", "เทอร์โมไดนามิกส์"
+            ],
+            "สุขศึกษาและพลศึกษา": [
+                "สุขภาพ", "โภชนาการ", "การออกกำลังกาย", "กีฬา", "การปฐมพยาบาล"
+            ],
+            "ศิลปะ": [
+                "ทัศนศิลป์", "ดนตรี", "นาฏศิลป์", "ศิลปะการแสดง", "ศิลปะไทย"
+            ],
+            "การงานอาชีพ": [
+                "งานบ้าน", "งานเกษตร", "งานช่าง", "งานธุรกิจ", "เทคโนโลยี"
+            ],
+            "เคมี": [
+                "อะตอมและตารางธาตุ", "พันธะเคมี", "ปริมาณสารสัมพันธ์", "กรด-เบส", "เคมีอินทรีย์"
+            ],
+            "ชีววิทยา": [
+                "เซลล์", "พันธุกรรม", "ระบบร่างกาย", "สิ่งแวดล้อม", "วิวัฒนาการ"
+            ],
+            "แคลคูลัส": [
+                "ลิมิต", "อนุพันธ์", "อินทิกรัล", "ฟังก์ชัน", "แอปพลิเคชันของแคลคูลัส"
+            ]
+        };
+
+        const subjectSelect = document.getElementById('subject');
+        const chapterSelect = document.getElementById('chapter');
+
+        subjectSelect.addEventListener('change', function() {
+            const subject = subjectSelect.value;
+            chapterSelect.innerHTML = '<option value="">--เลือกบท--</option>';
+            if (subjectToChapters[subject]) {
+                subjectToChapters[subject].forEach(chapter => {
+                    const opt = document.createElement('option');
+                    opt.value = chapter;
+                    opt.textContent = chapter;
+                    chapterSelect.appendChild(opt);
+                });
+            }
+        });
     </script>
     <script src="main.js"></script>
 </body>
 </html>
-                    <option value="ภาษาไทย">ภาษาไทย</option>
-                    <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
-                    <option value="สังคมศึกษา">สังคมศึกษา</option>
-                    <option value="ฟิสิกส์">ฟิสิกส์</option>
-                    <!-- เพิ่มวิชาอื่นๆ ได้ -->
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="level">เลือกระดับการศึกษา</label>
-                <select id="level" required>
-                    <option value="">--เลือกระดับ--</option>
-                    <option value="ประถมศึกษา">ประถมศึกษา</option>
-                    <option value="มัธยมต้น">มัธยมต้น</option>
-                    <option value="มัธยมปลาย">มัธยมปลาย</option>
-                    <option value="อุดมศึกษา">อุดมศึกษา</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="amount">จำนวนข้อสอบ</label>
-                <input type="number" id="amount" min="1" max="50" value="5" required>
-            </div>
-            <button type="submit" class="modern-btn">สร้างข้อสอบ</button>
-        </form>
-        <div id="result" class="modern-result"></div>
-    </div>
-    <script>
-        // redirect ถ้ายังไม่ได้เข้าสู่ระบบ
-        if (!localStorage.getItem('currentUser')) {
-            window.location.href = "login.html";
-        }
-    </script>
-    <script src="main.js"></script>
-</body>
-</html>
+
