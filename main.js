@@ -81,3 +81,57 @@ function getExamHistoryByUser(username) {
 }
 
 // ====== End database functions ======
+
+// ====== Google Sheets Sync Functions ======
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec"; // <-- เปลี่ยนเป็น URL ของคุณ
+
+// เพิ่มผู้ใช้ใหม่ลง Google Sheets
+async function addUserToSheet(username, password) {
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            action: "addUser",
+            username,
+            password
+        }),
+        headers: { "Content-Type": "application/json" }
+    });
+}
+
+// ตรวจสอบผู้ใช้จาก Google Sheets
+async function checkUserFromSheet(username, password) {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=checkUser&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+    const data = await res.json();
+    return data.exists; // true/false
+}
+
+// ดึงผู้ใช้ทั้งหมดจาก Google Sheets
+async function getAllUsersFromSheet() {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAllUsers`);
+    return await res.json(); // [{username, password}, ...]
+}
+
+// เพิ่มประวัติข้อสอบลง Google Sheets
+async function addExamHistoryToSheet(entry) {
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            action: "addExamHistory",
+            ...entry
+        }),
+        headers: { "Content-Type": "application/json" }
+    });
+}
+
+// ดึงประวัติข้อสอบทั้งหมดจาก Google Sheets
+async function getExamHistoryFromSheet() {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getExamHistory`);
+    return await res.json(); // [{username, subject, ...}, ...]
+}
+
+// ดึงประวัติข้อสอบของผู้ใช้จาก Google Sheets
+async function getExamHistoryByUserFromSheet(username) {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getExamHistoryByUser&username=${encodeURIComponent(username)}`);
+    return await res.json();
+}
+// ====== End Google Sheets Sync Functions ======
