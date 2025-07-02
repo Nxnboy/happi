@@ -83,7 +83,7 @@ function getExamHistoryByUser(username) {
 // ====== End database functions ======
 
 // ====== Google Sheets Sync Functions ======
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec"; // <-- เปลี่ยนเป็น URL ของคุณ
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby0e7KscQm364AkwhSl-JtiIWt1FpKtdVxdKF8iX3EoHNI5NSVQ-1-8HgtnEEdpy4fC/exec";
 
 // เพิ่มผู้ใช้ใหม่ลง Google Sheets
 async function addUserToSheet(username, password) {
