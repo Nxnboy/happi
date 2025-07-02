@@ -42,3 +42,42 @@ document.getElementById('examForm').addEventListener('submit', async function(e)
         resultDiv.innerHTML = "เกิดข้อผิดพลาด: " + err.message;
     }
 });
+
+// ====== Simple "database" functions using localStorage ======
+
+// เพิ่มผู้ใช้ใหม่
+function addUser(username, password) {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    users.push({ username, password });
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
+// ตรวจสอบผู้ใช้ (login)
+function checkUser(username, password) {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    return users.some(u => u.username === username && u.password === password);
+}
+
+// ดึงข้อมูลผู้ใช้ทั้งหมด
+function getAllUsers() {
+    return JSON.parse(localStorage.getItem('users') || '[]');
+}
+
+// เพิ่มประวัติข้อสอบ
+function addExamHistory(entry) {
+    const examHistory = JSON.parse(localStorage.getItem('examHistory') || '[]');
+    examHistory.push(entry);
+    localStorage.setItem('examHistory', JSON.stringify(examHistory));
+}
+
+// ดึงประวัติข้อสอบทั้งหมด
+function getExamHistory() {
+    return JSON.parse(localStorage.getItem('examHistory') || '[]');
+}
+
+// ดึงประวัติข้อสอบของผู้ใช้คนเดียว
+function getExamHistoryByUser(username) {
+    return getExamHistory().filter(e => e.username === username);
+}
+
+// ====== End database functions ======
